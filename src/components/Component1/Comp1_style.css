@@ -1,0 +1,7 @@
+#shuffDiv {
+    margin-left: 70px
+}
+
+#shuffDiv > img {
+    margin-left: -60px;
+}
