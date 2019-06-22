@@ -1,24 +1,34 @@
 import React, { Component } from "react";
-// import logo from './logo.svg';
 import logo from "../../src/bluehyp_0001a4_LoRes2.jpg"; //t0d
 import "./App.css";
 
 import Component1a from "../components/Component1/Component1a";
 import Component1b from "../components/Component1/Component1b";
 import Component1c from "../components/Component1/Component1c";
-// import Component2 from "../components/Component2/Component2";
 import DeckArray from "../components/DeckObject/deckObj";
 
-// let deckToShuffle = [...DeckArray];
 let up_dn_array = [];
 let selectedArray = [];
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    console.log("===>[App.js] constructor");
+  }
 
   state = {
-    deckToShuffle : [...DeckArray]
+    deckToShuffle: [...DeckArray]
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    console.log("===>[App.js] getDerivedStateFromProps", props);
+    return state;
   }
-  
+
+  componentDidMount() {
+    console.log('===>[App.js] componentDidMount')
+  }
+
   deckSelectedHandler = () => {
     var minorDeckArray = [];
 
@@ -44,23 +54,21 @@ class App extends Component {
 
     const deckSelectId = document.getElementById("deckSelect");
     /** begin set deckToShuffleArray based on selected option in dropdown*/
-    // deckSelectId.addEventListener("change", () => {
     var deckSelectValue =
       deckSelectId.options[deckSelectId.selectedIndex].value;
     console.log("selectedDeck==>", deckSelectValue);
     if (deckSelectValue !== "fullDeck") {
       if (deckSelectValue === "majorDeck") {
         // deckToShuffle = [...majorDeckArray];
-        this.setState({deckToShuffle: [...majorDeckArray]})
+        this.setState({ deckToShuffle: [...majorDeckArray] });
       } else {
         // deckToShuffle = [...minorDeckArray];
-        this.setState({deckToShuffle: [...minorDeckArray]})
+        this.setState({ deckToShuffle: [...minorDeckArray] });
       }
     } else {
       // deckToShuffle = [...DeckArray];
-      this.setState({deckToShuffle: [...DeckArray]})
+      this.setState({ deckToShuffle: [...DeckArray] });
     }
-    // });
   };
 
   deckShuffleHandler = () => {
@@ -84,12 +92,10 @@ class App extends Component {
     // const shuffleButton = document.getElementById("shuffle");
     const shuffImg = document.getElementById("shuffDiv");
 
-    // shuffleButton.addEventListener("click", () => {
     //if there are cards present from a previous shuffle, remove them
     while (shuffImg.children.length > 0) {
       shuffImg.removeChild(shuffImg.lastElementChild);
     }
-    // });
 
     //add (2a) instructions
     var shuffInstr = document.createElement("h3");
@@ -112,7 +118,10 @@ class App extends Component {
 
     for (let z = 0; z < this.state.deckToShuffle.length; z++) {
       //outputs shuffled deck to console
-      console.log("this.state.deckToShuffle==>", this.state.deckToShuffle[z].cardName);
+      console.log(
+        "this.state.deckToShuffle==>",
+        this.state.deckToShuffle[z].cardName
+      );
     }
 
     this.state.deckToShuffle.forEach(function() {
@@ -215,20 +224,19 @@ class App extends Component {
   };
 
   render() {
+    console.log("===>[App.js] render");
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title"> React Tarot App </h1>{" "}
         </header>{" "}
-        {/* <Component1a /> */}
         <Component1a changed={this.deckSelectedHandler} />
         <Component1b
           clicked={this.deckShuffleHandler}
           selectCard={this.cardSelectHandler}
         />
         <Component1c clicked={this.getReadingHandler} />
-        {/* <Component2 /> */}
       </div>
     );
   }
