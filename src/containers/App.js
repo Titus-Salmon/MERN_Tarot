@@ -9,11 +9,15 @@ import Component1c from "../components/Component1/Component1c";
 // import Component2 from "../components/Component2/Component2";
 import DeckArray from "../components/DeckObject/deckObj";
 
-let deckToShuffle = [...DeckArray];
+// let deckToShuffle = [...DeckArray];
 let up_dn_array = [];
 let selectedArray = [];
 
 class App extends Component {
+
+  state = {
+    deckToShuffle : [...DeckArray]
+  }
   
   deckSelectedHandler = () => {
     var minorDeckArray = [];
@@ -46,12 +50,15 @@ class App extends Component {
     console.log("selectedDeck==>", deckSelectValue);
     if (deckSelectValue !== "fullDeck") {
       if (deckSelectValue === "majorDeck") {
-        deckToShuffle = [...majorDeckArray];
+        // deckToShuffle = [...majorDeckArray];
+        this.setState({deckToShuffle: [...majorDeckArray]})
       } else {
-        deckToShuffle = [...minorDeckArray];
+        // deckToShuffle = [...minorDeckArray];
+        this.setState({deckToShuffle: [...minorDeckArray]})
       }
     } else {
-      deckToShuffle = [...DeckArray];
+      // deckToShuffle = [...DeckArray];
+      this.setState({deckToShuffle: [...DeckArray]})
     }
     // });
   };
@@ -93,22 +100,22 @@ class App extends Component {
     shuffImg.appendChild(shuffInstr);
 
     //begin Durstenfeld shuffle
-    for (let i = deckToShuffle.length - 1; i > 0; i--) {
+    for (let i = this.state.deckToShuffle.length - 1; i > 0; i--) {
       //shuffle deckToShuffle
       const j = Math.floor(Math.random() * (i + 1));
-      [deckToShuffle[i], deckToShuffle[j]] = [
-        deckToShuffle[j],
-        deckToShuffle[i]
+      [this.state.deckToShuffle[i], this.state.deckToShuffle[j]] = [
+        this.state.deckToShuffle[j],
+        this.state.deckToShuffle[i]
       ];
     }
     //end Durstenfeld shuffle
 
-    for (let z = 0; z < deckToShuffle.length; z++) {
+    for (let z = 0; z < this.state.deckToShuffle.length; z++) {
       //outputs shuffled deck to console
-      console.log("deckToShuffle==>", deckToShuffle[z].cardName);
+      console.log("this.state.deckToShuffle==>", this.state.deckToShuffle[z].cardName);
     }
 
-    deckToShuffle.forEach(function() {
+    this.state.deckToShuffle.forEach(function() {
       //show deck of cards (back of cards) when clicking 'shuffle' button
       var image = document.createElement("img");
       image.src = "../img/cardimg/rider-waite-original-back.jpg";
@@ -129,13 +136,13 @@ class App extends Component {
     //doing so puts us back at a zero-based index situation, allowing us to select all card elements of the array
     console.log(index);
     if (index > -1) {
-      selectedArray.push(deckToShuffle[index]);
+      selectedArray.push(this.state.deckToShuffle[index]);
     }
     console.log("selectedArray===>", selectedArray);
     console.log("e.target==>", e.target);
 
     if (
-      deckToShuffle[index] !== undefined &&
+      this.state.deckToShuffle[index] !== undefined &&
       e.target.style.visibility !== "hidden"
     ) {
       //turn over clicked card in #selectDiv
@@ -143,8 +150,8 @@ class App extends Component {
       var image = document.createElement("img");
 
       Math.random() > 0.5
-        ? (image.src = deckToShuffle[index].imgSrcUp)
-        : (image.src = deckToShuffle[index].imgSrcDn); //flip coin for up or down card
+        ? (image.src = this.state.deckToShuffle[index].imgSrcUp)
+        : (image.src = this.state.deckToShuffle[index].imgSrcDn); //flip coin for up or down card
       up_dn_array.push(image.src);
       console.log("up_dn_array==>", up_dn_array);
       document.getElementById("selectDiv").appendChild(image);
