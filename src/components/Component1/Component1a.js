@@ -5,6 +5,7 @@ const component1a = props => {
   return (
     <div>
       <div className="container1">
+        <h1>{props.title}</h1>
         <h3>(1) Select Deck Format</h3>
         <select id="deckSelect" onChange={props.changed}>
           <option value="fullDeck">Major & Minor Arcana</option>

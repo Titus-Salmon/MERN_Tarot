@@ -9,6 +9,47 @@ import DeckArray from "../components/DeckObject/deckObj";
 
 let up_dn_array = [];
 let selectedArray = [];
+let minorDeckArray = [];
+let majorDeckArray = [];
+
+function createMinor() {
+  //create Minor Arcana deck from imported entire deck
+  for (let i = 22; i < 78; i++) {
+    minorDeckArray.push(DeckArray[i]);
+  }
+}
+createMinor();
+console.log("minorDeckArray===>", minorDeckArray);
+
+function createMajor() {
+  //create Major Arcana deck from imported entire deck
+  for (let i = 0; i < 22; i++) {
+    majorDeckArray.push(DeckArray[i]);
+  }
+}
+createMajor();
+console.log("majorDeckArray===>", majorDeckArray);
+
+function clearShuffledCards() {
+  var shuffImg = document.getElementById("shuffDiv");
+  while (shuffImg.children.length > 0) {
+    shuffImg.removeChild(shuffImg.lastElementChild);
+  }
+}
+
+function clearReadingResults() {
+  var readingUl = document.getElementById("readingUl");
+  while (readingUl.children.length > 0) {
+    readingUl.removeChild(readingUl.lastElementChild);
+  }
+}
+
+function clearSelectedCards() {
+  var selecImg = document.getElementById("selectDiv");
+  while (selecImg.children.length > 0) {
+    selecImg.removeChild(selecImg.lastElementChild);
+  }
+}
 
 class App extends Component {
   constructor(props) {
@@ -26,31 +67,21 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log('===>[App.js] componentDidMount')
+    console.log("===>[App.js] componentDidMount");
   }
 
   deckSelectedHandler = () => {
-    var minorDeckArray = [];
+    //if there are cards present from a previous shuffle, remove them
+    clearShuffledCards();
 
-    function createMinor() {
-      //create Minor Arcana deck from imported entire deck
-      for (let i = 22; i < 78; i++) {
-        minorDeckArray.push(DeckArray[i]);
-      }
-    }
-    createMinor();
-    console.log("minorDeckArray===>", minorDeckArray);
+    //if there are reading results present from a previous reading, remove them
+    clearReadingResults();
 
-    var majorDeckArray = [];
+    //if there are selected cards present from a previous shuffle, remove them
+    clearSelectedCards();
 
-    function createMajor() {
-      //create Major Arcana deck from imported entire deck
-      for (let i = 0; i < 22; i++) {
-        majorDeckArray.push(DeckArray[i]);
-      }
-    }
-    createMajor();
-    console.log("majorDeckArray===>", majorDeckArray);
+    //if there are up_dn_array results from previous shuffle, remove them
+    up_dn_array = [];
 
     const deckSelectId = document.getElementById("deckSelect");
     /** begin set deckToShuffleArray based on selected option in dropdown*/
@@ -74,17 +105,11 @@ class App extends Component {
   deckShuffleHandler = () => {
     selectedArray = []; //clear previous selectedArray
 
-    const selecImg = document.getElementById("selectDiv");
     //if there are selected cards present from a previous shuffle, remove them
-    while (selecImg.children.length > 0) {
-      selecImg.removeChild(selecImg.lastElementChild);
-    }
+    clearSelectedCards();
 
     //if there are reading results present from a previous reading, remove them
-    var readingUl = document.getElementById("readingUl");
-    while (readingUl.children.length > 0) {
-      readingUl.removeChild(readingUl.lastElementChild);
-    }
+    clearReadingResults();
 
     //if there are up_dn_array results from previous shuffle, remove them
     up_dn_array = [];
@@ -93,9 +118,7 @@ class App extends Component {
     const shuffImg = document.getElementById("shuffDiv");
 
     //if there are cards present from a previous shuffle, remove them
-    while (shuffImg.children.length > 0) {
-      shuffImg.removeChild(shuffImg.lastElementChild);
-    }
+    clearShuffledCards();
 
     //add (2a) instructions
     var shuffInstr = document.createElement("h3");
@@ -169,11 +192,9 @@ class App extends Component {
 
   getReadingHandler = () => {
     console.log("your reading", selectedArray);
+
     //if there are reading results present from a previous reading, remove them
-    var readingUl = document.getElementById("readingUl");
-    while (readingUl.children.length > 0) {
-      readingUl.removeChild(readingUl.lastElementChild);
-    }
+    clearReadingResults();
 
     for (let i = 0; i < up_dn_array.length; i++) {
       var reg1 = /r.jpg/; //regexp to check whether image is upright or reversed
@@ -231,7 +252,10 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title"> React Tarot App </h1>{" "}
         </header>{" "}
-        <Component1a changed={this.deckSelectedHandler} />
+        <Component1a
+          title={this.props.appTitle}
+          changed={this.deckSelectedHandler}
+        />
         <Component1b
           clicked={this.deckShuffleHandler}
           selectCard={this.cardSelectHandler}
